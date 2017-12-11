@@ -17,6 +17,6 @@ class MineCriterion extends Criterion
 
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('user_id', Auth::user()->id);
+        return $model::where('user_id', Auth::user()->id);
     }
 }

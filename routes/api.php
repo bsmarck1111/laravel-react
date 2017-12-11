@@ -32,3 +32,13 @@ Route::group(['middleware' => 'auth:api'], function() {
 
     Route::delete('/auth/logout', 'Auth\LoginController@logout')->name('auth.logout');;
 });
+
+Route::get('/debug', function(){
+    $app = app();
+    $collection = new \Illuminate\Support\Collection();
+    $repository = new \App\Repositories\UserRepository($app, $collection);
+    $records = $repository
+        ->pushCriteria(new \App\Repositories\Criteria\LatestCriterion())
+        ->all();
+    dd($records);
+});

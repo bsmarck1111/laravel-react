@@ -16,7 +16,7 @@ class PublishedCriterion extends Criterion
 
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->where('published', true)
+        return $model::where('published', true)
             ->whereDate('published_at', '<=', now());
     }
 }

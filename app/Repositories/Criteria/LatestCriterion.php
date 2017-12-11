@@ -16,6 +16,6 @@ class LatestCriterion extends Criterion
 
     public function apply($model, RepositoryInterface $repository)
     {
-        return $model->orderBy('created_at', 'desc');
+        return $model::orderBy('created_at', 'desc');
     }
 }

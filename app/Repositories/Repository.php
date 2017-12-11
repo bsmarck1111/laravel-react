@@ -2,6 +2,8 @@
 
 namespace App\Repositories;
 
+use App\Repositories\Contracts\QueryBuilderInterface;
+use App\Repositories\Traits\QueryBuilderMacro;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +17,9 @@ use App\Repositories\Criteria\Criterion;
  * Class Repository
  * @package Bosnadev\Repositories\Eloquent
  */
-abstract class Repository implements RepositoryInterface, CriterionInterface
+abstract class Repository implements RepositoryInterface, CriterionInterface, QueryBuilderInterface
 {
-
+    use QueryBuilderMacro;
     /**
      * @var App
      */
@@ -59,7 +61,6 @@ abstract class Repository implements RepositoryInterface, CriterionInterface
         $this->app = $app;
         $this->criteria = $collection;
         $this->resetScope();
-        $this->makeModel();
     }
 
     /**
@@ -345,6 +346,10 @@ abstract class Repository implements RepositoryInterface, CriterionInterface
     {
         if (true === $this->skipCriteria)
             return $this;
+
+        if(!$this->model){
+            $this->model = $this->getQueryBuilder();
+        }
 
         foreach ($this->getCriteria() as $criterion) {
             if ($criterion instanceof Criterion) {
